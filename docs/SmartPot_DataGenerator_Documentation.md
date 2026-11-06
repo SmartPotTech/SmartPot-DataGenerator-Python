@@ -10,7 +10,10 @@ equipo: SmartPotTech
 proyecto: smartpot.app
 -->
 
-# SmartPot-DataGenerator
+# SmartPot-DataGenerator-Python (Deprecado)
+
+> [!WARNING]
+> **Componente Legado (Stack A)**: Este simulador monolítico en Python ha sido reemplazado en producción por el simulador de alto rendimiento en Rust ([`SmartPot-DataGenerator`](https://github.com/SmartPotTech/SmartPot-DataGenerator)). Este documento describe la implementación original en Python como registro histórico.
 
 ## Ficha del documento
 

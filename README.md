@@ -1,9 +1,14 @@
-# SmartPot-DataGenerator
+# SmartPot-DataGenerator-Python (Deprecated / Deprecado)
+
+> [!WARNING]
+> **Deprecated / Deprecado (Legacy Stack A)**  
+> **English:** This repository contains the legacy Stack A (v1.0) crop simulator implemented in Python with asyncio and paho-mqtt. It has been **deprecated and superseded in production** by the canonical modern Stack B simulator: [**`SmartPot-DataGenerator`**](https://github.com/SmartPotTech/SmartPot-DataGenerator) (Rust, Tokio, Axum, rumqttc with compact binary v2 support). Preserved solely for historical reference.  
+> **Español:** Este repositorio contiene la implementación legada del Stack A (v1.0) del simulador de cultivos desarrollado en Python con asyncio y paho-mqtt. Ha sido **deprecado y sustituido en producción** por el simulador canónico del Stack B: [**`SmartPot-DataGenerator`**](https://github.com/SmartPotTech/SmartPot-DataGenerator) (Rust, Tokio, Axum, rumqttc con soporte para paquete binario v2). Conservado exclusivamente como referencia histórica.
 
 ## Estado del Proyecto
 
-[![Python CI](https://github.com/SmartPotTech/SmartPot-DataGenerator/actions/workflows/ci.yml/badge.svg)](https://github.com/SmartPotTech/SmartPot-DataGenerator/actions/workflows/ci.yml)
-[![Publish Docker Images](https://github.com/SmartPotTech/SmartPot-DataGenerator/actions/workflows/packaging.yml/badge.svg)](https://github.com/SmartPotTech/SmartPot-DataGenerator/actions/workflows/packaging.yml)
+[![Python CI](https://github.com/SmartPotTech/SmartPot-DataGenerator-Python/actions/workflows/ci.yml/badge.svg)](https://github.com/SmartPotTech/SmartPot-DataGenerator-Python/actions/workflows/ci.yml)
+[![Publish Docker Images](https://github.com/SmartPotTech/SmartPot-DataGenerator-Python/actions/workflows/packaging.yml/badge.svg)](https://github.com/SmartPotTech/SmartPot-DataGenerator-Python/actions/workflows/packaging.yml)
 
 ## Descripción
 
