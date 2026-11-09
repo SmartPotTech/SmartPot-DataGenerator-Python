@@ -1,53 +1,19 @@
-# SmartPot-DataGenerator-Python (Deprecated / Deprecado)
+# SmartPot-DataGenerator-Python (Legacy Stack A Reference)
 
 > [!WARNING]
-> **Deprecated / Deprecado (Legacy Stack A)**  
-> **English:** This repository contains the legacy Stack A (v1.0) crop simulator implemented in Python with asyncio and paho-mqtt. It has been **deprecated and superseded in production** by the canonical modern Stack B simulator: [**`SmartPot-DataGenerator`**](https://github.com/SmartPotTech/SmartPot-DataGenerator) (Rust, Tokio, Axum, rumqttc with compact binary v2 support). Preserved solely for historical reference.  
-> **Español:** Este repositorio contiene la implementación legada del Stack A (v1.0) del simulador de cultivos desarrollado en Python con asyncio y paho-mqtt. Ha sido **deprecado y sustituido en producción** por el simulador canónico del Stack B: [**`SmartPot-DataGenerator`**](https://github.com/SmartPotTech/SmartPot-DataGenerator) (Rust, Tokio, Axum, rumqttc con soporte para paquete binario v2). Conservado exclusivamente como referencia histórica.
+> **Deprecated (Legacy Stack A Reference Implementation)**  
+> This repository contains the legacy Stack A (v1.0) crop simulator implemented in Python with asyncio and paho-mqtt. It has been **deprecated and superseded in production** by the canonical modern Stack B simulator: [**`SmartPot-DataGenerator`**](https://github.com/SmartPotTech/SmartPot-DataGenerator) (Rust, Tokio, Axum, rumqttc with compact binary v2 support). Preserved solely for historical reference.
 
-## Estado del Proyecto
+## Project Status
 
 [![Python CI](https://github.com/SmartPotTech/SmartPot-DataGenerator-Python/actions/workflows/ci.yml/badge.svg)](https://github.com/SmartPotTech/SmartPot-DataGenerator-Python/actions/workflows/ci.yml)
 [![Publish Docker Images](https://github.com/SmartPotTech/SmartPot-DataGenerator-Python/actions/workflows/packaging.yml/badge.svg)](https://github.com/SmartPotTech/SmartPot-DataGenerator-Python/actions/workflows/packaging.yml)
 
-## Descripción
+## Description
 
-SmartPot-DataGenerator es el **simulador de cultivos** de SmartPot: da vida a los **cultivos virtuales**, que corren sin
-parar en un contenedor y hablan el mismo contrato MQTT v1 que el ESP32 de un cultivo real, con la cuenta del cultivo y
-sus tópicos. Cada cultivo simulado:
+SmartPot-DataGenerator-Python was the crop simulation service of **SmartPot Stack A**: an asynchronous **Python** service simulating environmental thermodynamics and biological dynamics, streaming telemetry via MQTT, and reacting to actuation commands.
 
-- Publica telemetría (temperatura, humedad, luz, pH, TDS, humedad del sustrato y presión) con ruido de sensor.
-- Obedece los comandos en los tres modos: la bomba sube la humedad del sustrato, el ventilador enfría y seca el aire,
-  la luz ultravioleta suma luz, el humidificador sube la humedad y los dosificadores corrigen pH y nutrientes. Sin
-  duración, un actuador sigue encendido hasta que se apaga, y tras cada orden ejecutada publica una lectura a los 2 s.
-- Confirma cada comando con su ACK (`EXECUTED` o `FAILED`) y anuncia su estado `online`/`offline` con mensaje retenido y
-  última voluntad.
-
-Cada cultivo simulado trabaja en uno de tres modos:
-
-| Modo      | Qué refleja                                                                                                                                                                                                                                                       | Para qué sirve                                                                                      |
-|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------|
-| `AUTO`    | Ciclo de día y noche alrededor de los valores ideales de la especie                                                                                                                                                                                               | Datos demo y pruebas de extremo a extremo                                                           |
-| `MANUAL`  | Los medidores que mueve la persona desde la PWA; los actuadores siguen actuando encima                                                                                                                                                                            | Provocar una situación (sustrato seco, pH alto…) y ver cómo reacciona el asistente                  |
-| `WEATHER` | El clima real del lugar del cultivo: temperatura, humedad, sol, lluvia y presión, con [Open-Meteo](https://open-meteo.com) (abierto y sin clave), filtrado por el lugar: bajo techo se amortigua y no llueve; la media sombra y la sombra bajan la luz y el calor | Un cultivo que se seca más rápido con sol y aire seco y se moja cuando llueve si está al aire libre |
-
-La PWA dibuja el cultivo en su lugar con el clima de afuera (despejado, nublado, niebla, llovizna, lluvia, tormenta o
-nieve), de día o de noche. Cada confirmación dice la duración como se lee: «Ventilador encendido por 10 min».
-
-Los cultivos virtuales los pide la API: nacen al crear un cultivo `VIRTUAL`, se retiran al pausar su simulación o al
-borrarlo, y no se pueden convertir en reales. Los cultivos fijos de `SIMULATOR_DEVICES` (demo y QA) son cultivos reales
-para la plataforma: el simulador publica con su clave como lo haría un ESP32.
-
-### Cultivo virtual o Wokwi
-
-|                    | Este simulador                                             | [SmartPot-IoT](https://github.com/SmartPotTech/SmartPot-IoT) en Wokwi |
-|--------------------|------------------------------------------------------------|-----------------------------------------------------------------------|
-| Qué ejecuta        | Modelo físico en Python                                    | El firmware MicroPython real sobre un ESP32 simulado                  |
-| Cómo corre         | Contenedor siempre encendido, desplegado con la plataforma | A mano, en el navegador, mientras la pestaña esté abierta             |
-| Para la plataforma | Un cultivo virtual (o un cultivo fijo de la demo)          | Un cultivo real                                                       |
-| Uso                | Cultivos virtuales de la PWA, demo y QA                    | Validar el firmware antes de pasar a hardware físico                  |
-
-## Estructura del Proyecto
+## Project Structure
 
 ```text
 SmartPot-DataGenerator/
@@ -132,7 +98,7 @@ Abre http://localhost:5173 e ingresa con `demo@smartpot.app` / `SmartPot2026`. S
 `docker compose -p smartpot-demo down` (con `-v` borra también los datos). Más detalle en la
 [demo](https://github.com/SmartPotTech/.github/tree/main/docker/demo).
 
-### Requisitos Previos
+### Prerequisites
 
 - [uv](https://docs.astral.sh/uv/)
 - Un broker de SmartPot con las cuentas de dispositivo aprovisionadas por la API
@@ -152,7 +118,7 @@ MQTT_HOST=mqtt.smartpot.app MQTT_TLS=true MQTT_CA_FILE=ca.crt \
 SIMULATOR_DEVICES=<cropId>:<clave>:LETTUCE uv run python -m simulator
 ```
 
-### Pruebas
+### Testing
 
 ```bash
 uv run ruff check .
@@ -191,6 +157,6 @@ muestran la plataforma completa en una sola imagen ampliable:
 - [Arquitectura completa](https://github.com/SmartPotTech/.github/blob/main/docs/diagrams/SmartPot_Global_01_Architecture.svg):
   dónde corre el simulador y con quién habla
 
-## Licencia
+## License
 
 Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.

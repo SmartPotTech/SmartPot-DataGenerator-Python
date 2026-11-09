@@ -2,24 +2,20 @@
 sequenceDiagram
   autonumber
   participant A as SmartPot-API
-  participant C as api.py
+  participant C as api.py (FastAPI :8081)
   participant M as PotManager
   participant D as SimulatedDevice
-  participant B as Broker
-  A->>C: PUT /v1/pots/{cropId} (clave, especie, modo, lugar, intervalo)
-  C->>M: crea o cambia el cultivo virtual
-  M->>D: conecta con usuario cropId y la clave
-  D->>B: CONNECT con última voluntad offline
-  D->>B: status online (retenido)
-  loop cada intervalo
-    M->>M: environment.step → lectura con ruido
-    D->>B: telemetry
+  participant B as Mosquitto Broker
+  A->>C: PUT /v1/pots/{cropId} (key, species, mode, location, interval)
+  C->>M: Create or update virtual pot
+  M->>D: Connect MQTT client with crop credentials
+  D->>B: CONNECT with LWT offline status
+  D->>B: Publish status online (retained)
+  loop Every sampling interval
+    M->>M: Step environment model & add sensor noise
+    D->>B: Publish telemetry JSON
   end
-  B->>D: commands {id, actuator, action, durationSeconds}
-  D->>M: environment.apply
-  D->>B: commands/ack EXECUTED con el mensaje
+  B->>D: Dispatch command {id, actuator, action, durationSeconds}
+  D->>M: Apply actuator effect to environment
+  D->>B: Publish commands/ack EXECUTED
   A->>C: GET /v1/pots/{cropId}
-  C-->>A: modo, lectura, clima, actuadores encendidos y último comando
-  A->>C: DELETE /v1/pots/{cropId} (pausa o borrado)
-  D->>B: status offline y desconexión
-  Note over A,C: Cada minuto la API compara con GET /v1/pots:<br/>recrea las simulaciones activas que falten y retira las demás
